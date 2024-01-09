@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace S10206629_PRG2Assignment
 {
-    internal class Topping
+    internal class Flavour
     {
         public string Type {  get; set; }
-        Topping() { }
-        Topping(string type) 
+        public bool Premium { get; set; }
+        public int Quantity { get; set; }
+        public Flavour() { }
+        public Flavour(string type, bool premium, int quantity)
         {
             this.Type = type;
+            this.Premium = premium;
+            this.Quantity = quantity;
         }
         public override string ToString()
         {
-            return Type;
+            return Type + Premium + Quantity;
         }
     }
 }
