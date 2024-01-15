@@ -6,6 +6,25 @@
 
 // To add code to create customers and orders from data files
 
+// Read and create customers and pointcards based on customers.csv
+string fileName = "~\\datafiles\\customers.csv";
+string[] lines = File.ReadAllLines(fileName);
+
+List<Customer> customersList = new List<Customer>();
+for (int i = 1; i < lines.Length; i++)
+{
+    string[] line = lines[i].Split(',');
+
+    // create customer
+    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), Convert.ToDateTime(line[2]));
+    // modify customer's point card
+    customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
+
+    customersList.Add(customer)
+}
+
+// Read and create orders based on orders.csv
+
 //Main Program Loop
 void MenuStart()
 {

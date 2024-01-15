@@ -22,11 +22,11 @@ public class PointCard
         {
             Tier = 'Gold'
         }
-        else if (Points => 50)
+        else if (Points => 50 && Tier != 'Gold')
         {
             Tier = 'Silver'
         }
-        else
+        else if (Tier != 'Gold' || Tier != 'Silver')
         {
             Tier = 'Ordinary'
         }
