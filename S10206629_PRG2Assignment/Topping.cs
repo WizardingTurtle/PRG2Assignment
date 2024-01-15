@@ -9,8 +9,8 @@ namespace S10206629_PRG2Assignment
     internal class Topping
     {
         public string Type {  get; set; }
-        Topping() { }
-        Topping(string type) 
+        public Topping() { }
+        public Topping(string type) 
         {
             this.Type = type;
         }

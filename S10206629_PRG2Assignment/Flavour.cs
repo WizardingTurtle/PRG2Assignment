@@ -8,7 +8,7 @@ namespace S10206629_PRG2Assignment
 {
     internal class Flavour
     {
-        public string Type {  get; set; }
+        public string Type  { get; set; }
         public bool Premium { get; set; }
         public int Quantity { get; set; }
         public Flavour() { }

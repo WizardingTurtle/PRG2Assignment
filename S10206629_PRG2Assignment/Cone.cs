@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace S10206629_PRG2Assignment
+﻿namespace S10206629_PRG2Assignment
 {
     internal class Cone : IceCream
     {
         public bool Dipped {  get; set; }  
         public Cone() { }
-        public Cone(string option, int scoops, List<Flavour> flavour, List<Topping> topping, bool dipped) 
+        public Cone(string option, int scoops, List<Flavour> flavour, List<Topping> topping, bool dipped) : base(option, scoops, flavour, topping)
         {
-            this.Option = option;
-            this.Scoops = scoops;
-            this.Flavours = flavour;
-            this.Toppings = topping;
             this.Dipped = dipped;
         }
 
@@ -39,7 +29,7 @@ namespace S10206629_PRG2Assignment
             // flavour price
             foreach (Flavour flavour in Flavours)
             {
-                if (flavour.Premium = true)
+                if (flavour.Premium)
                 {
                     price += 2;
                 }

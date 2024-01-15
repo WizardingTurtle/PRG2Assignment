@@ -4,18 +4,16 @@ using System.Collections.Generic;
 
 public class Customer
 {
-    public string Name;
-    public int MemberId;
-    public DateTime Dob;
-    public Order CurrentOrder;
-    private List<Order> OrderHistory;
-    public PointCard Rewards;
+    // Initiliaze
+    public string Name { get; set; }
+    public int MemberId { get; set; }
+    public DateTime Dob { get; set; }
+    public Order CurrentOrder { get; set; }
+    public List<Order> OrderHistory { get; set; }
+    public PointCard Rewards { get; set; }
 
-    public Customer()
-    {
-        OrderHistory = new List<Order>();
-        Rewards = new PointCard();
-    }
+    // Constructors
+    public Customer(){}
 
     public Customer(string name, int memberId, DateTime dob)
     {
@@ -26,7 +24,7 @@ public class Customer
         Rewards = new PointCard();
     }
 
-
+    // Class methods
     public Order MakeOrder()
     {
         CurrentOrder = new Order();

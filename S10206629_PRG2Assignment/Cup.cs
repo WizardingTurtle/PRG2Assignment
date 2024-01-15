@@ -9,13 +9,7 @@ namespace S10206629_PRG2Assignment
     internal class Cup : IceCream
     {
         public Cup() { }
-        public Cup(string option, int scoops, List<Flavour> flavour, List<Topping> topping) 
-        {
-            this.Option = option;
-            this.Scoops = scoops;
-            this.Flavours = flavour;
-            this.Toppings = topping;
-        }
+        public Cup(string option, int scoops, List<Flavour> flavour, List<Topping> topping) : base(option, scoops, flavour, topping) { }
 
         public override double CalculatePrice()
         {
@@ -37,7 +31,7 @@ namespace S10206629_PRG2Assignment
             // flavour price
             foreach (Flavour flavour in Flavours)
             {
-                if (flavour.Premium = true)
+                if (flavour.Premium)
                 {
                     price += 2;
                 }
@@ -47,6 +41,11 @@ namespace S10206629_PRG2Assignment
             price += this.Toppings.Count();
 
             return price;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

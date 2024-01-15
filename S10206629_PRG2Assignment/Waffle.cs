@@ -39,7 +39,7 @@ namespace S10206629_PRG2Assignment
             // flavour price
             foreach (Flavour flavour in Flavours)
             {
-                if (flavour.Premium = true)
+                if (flavour.Premium)
                 {
                     price += 2;
                 }

@@ -1,17 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using S10206629_PRG2Assignment;
 using System;
 using System.Collections.Generic;
 
 public class Order
 {
-    public int Id;
-    public DateTime TimeReceived;
-    public DateTime? TimeFulfilled;
-    public List<IceCream> IceCreamList;   
+    public int Id { get; set; }
+    public DateTime TimeReceived { get; set; }
+    public DateTime? TimeFulfilled { get; set; }
+    public List<IceCream> IceCreamList { get; set; }
 
-    public Order()
-    {
-    }
+    // Constructors
+    public Order(){}
 
     public Order(int id, DateTime timeReceived)
     {
@@ -19,8 +19,11 @@ public class Order
         TimeReceived = timeReceived;
         IceCreamList = new List<IceCream>();
     }
+
+    // Class methods
     public void ModifyIceCream(int iceCreamIndex)
     {
+        // to edit later when question is being done
     }
 
     public void AddIceCream(IceCream iceCream)
@@ -30,6 +33,7 @@ public class Order
 
     public void DeleteIceCream(int iceCreamIndex)
     {
+        IceCreamList.RemoveAt(iceCreamIndex);
     }
 
     public double CalculateTotal()
