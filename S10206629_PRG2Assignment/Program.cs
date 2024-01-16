@@ -7,6 +7,7 @@
 // To add code to create customers and orders from data files
 // Read and create customers and pointcards based on customers.csv
 using S10206629_PRG2Assignment;
+using System;
 using System.Diagnostics.Metrics;
 
 string fileName = ".\\datafiles\\customers.csv";
@@ -254,9 +255,9 @@ foreach (Order order in ordersList)
         {
             displayCustomerOrder();
         }
-        else if (option == "7")
+        else if (option == "6")
         {
-        //Placeholder
+            modifyCustomerOrder();
         }
         else if (option == "0")
         {
@@ -331,7 +332,34 @@ void displayCustomerOrder()
     }
 }
 //Feature 6 Modify order details
+void modifyCustomerOrder()
+{
+    // Display Customers
+    Console.WriteLine("{0,10} {1}", "Member Id", "Member Name");
+    foreach (Customer customer in customersList)
+    {
+        Console.WriteLine("{0,3} {1}", customer.MemberId, customer.Name);
+    }
+    Console.WriteLine();
 
+    // Input
+    Console.Write("Select a customer by ID: ");
+    int Id = Convert.ToInt32(Console.ReadLine());
+
+    int index = customersList.FindIndex(c => c.MemberId == Id);
+    if (customersList[index].CurrentOrder != null)
+    {
+        Console.WriteLine("Icecreams in current order");
+        foreach (IceCream ic in customersList[index].CurrentOrder.IceCreamList)
+        {
+            Console.WriteLine(ic.ToString());
+        }    
+    }
+    else
+    {
+        Console.WriteLine("No order available");
+    }
+}
 
 
 
