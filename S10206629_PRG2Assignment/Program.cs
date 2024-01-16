@@ -230,8 +230,8 @@ foreach (Order order in ordersList)
         "[0] Exit Program\r\n" +
         "------------------------------------"
         );
-        Console.Write("Please Choose an option");
-        String option = Console.ReadLine();
+        Console.Write("Please Choose an option: ");
+        string option = Console.ReadLine();
 
         if (option == "1")
         {
@@ -239,7 +239,7 @@ foreach (Order order in ordersList)
         }
         else if (option == "2")
         {
-        //Placeholder
+            listAllOrders();
         }
         else if (option == "3")
         {
@@ -265,9 +265,32 @@ foreach (Order order in ordersList)
     }
 }
 //Feature 1 List all customers
+void listAllCustomers()
+{
 
+}
 //Feature 2 List all current orders
-
+void listAllOrders()
+{
+    // List Gold Member Current Orders
+    Console.WriteLine("Gold member's current orders");
+    foreach (Customer customer in customersList)
+    {
+        if (customer.Rewards.Tier == "Gold")
+        {
+            Console.WriteLine(customer.CurrentOrder.ToString());
+        }
+    }
+    // List regular queue Current Orders
+    Console.WriteLine("Regular queue current orders");
+    foreach (Customer customer in customersList)
+    {
+        if (customer.Rewards.Tier != "Gold")
+        {
+            Console.WriteLine(customer.CurrentOrder.ToString());
+        }
+    }
+}
 //Feature 3 Register a new customer
 
 //Feature 4 Create a customer’s order
@@ -275,3 +298,9 @@ foreach (Order order in ordersList)
 //Feature 5 Display order details of a customer
 
 //Feature 6 Modify order details
+
+
+
+
+// Start Program
+MenuStart();
