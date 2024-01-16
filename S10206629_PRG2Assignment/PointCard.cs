@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-public class PointCard
+ class PointCard
 {
     // Initiliaze
     public int Points { get; set; }
@@ -18,17 +18,17 @@ public class PointCard
         Points = points;
         PunchCard = punchCard;
 
-        if (Points =>100)
+        if (Points >= 100)
         {
-            Tier = 'Gold'
+            Tier = "Gold";
         }
-        else if (Points => 50 && Tier != 'Gold')
+        else if (Points >= 50 && Tier != "Gold")
         {
-            Tier = 'Silver'
+            Tier = "Silver";
         }
-        else if (Tier != 'Gold' || Tier != 'Silver')
+        else if (Tier != "Gold" || Tier != "silver")
         {
-            Tier = 'Ordinary'
+            Tier = "Ordinary";
         }
     }
 
@@ -36,13 +36,13 @@ public class PointCard
     public void AddPoints(int pointsToAdd)
     {
         Points += pointsToAdd;
-        if (Points => 100)
+        if (Points >= 100)
         {
-            Tier = 'Gold'
+            Tier = "Gold";
         }
-        else if (Points => 50 && Tier != 'Gold')
+        else if (Points >= 50 && Tier != "Gold")
         {
-            Tier = 'Silver'
+            Tier = "Silver";
         }
     }
 

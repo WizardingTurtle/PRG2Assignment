@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace S10206629_PRG2Assignment
 {
-    internal class Cup : IceCream
+     class Cup : IceCream
     {
         public Cup() { }
         public Cup(string option, int scoops, List<Flavour> flavour, List<Topping> topping) : base(option, scoops, flavour, topping) { }

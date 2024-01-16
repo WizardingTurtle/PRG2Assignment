@@ -3,7 +3,7 @@ using S10206629_PRG2Assignment;
 using System;
 using System.Collections.Generic;
 
-public class Order
+ class Order
 {
     public int Id { get; set; }
     public DateTime TimeReceived { get; set; }

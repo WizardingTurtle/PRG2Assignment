@@ -21,7 +21,7 @@ for (int i = 1; i < lines.Length; i++)
     // modify customer's point card
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
-
+    // add customer to list
     customersList.Add(customer);
 }
 
@@ -38,7 +38,78 @@ for (int i = 1; i < lines.Length; i++)
 
     if (IdExist) 
     {
-        //Placeholder
+        // Find index of order in list
+        int Oindex = ordersList.FindIndex(order => order.Id == Convert.ToInt32(line[0]));
+        // Create Flavour List
+        List<Flavour> flavours = new List<Flavour>();
+        // loop through line index for flavours
+        for (int f = 8; f < 11; f++)
+        {
+            //check if flavour is not null
+            if (line[f] != "")
+            {
+                //check if flavour exists in list
+                bool TypeExist = flavours.Any(item => item.Type == line[f]);
+                // increment quantity of flavour if true
+                if (TypeExist)
+                {
+                    //find flavour in list by index + checking if type is the flavour
+                    int index = flavours.FindIndex(item => item.Type == line[f]);
+                    flavours[index].Quantity += 1;
+                }
+
+                // Create flavour and add to list
+                else
+                {
+                    bool premium = false;
+                    //check if flavour is premium
+                    if (line[f] == "Durian" || line[f] == "Ube" || line[f] == "Sea Salt")
+                    {
+                        premium = true;
+                    }
+                    else
+                    {
+                        premium = false;
+                    }
+
+                    flavours.Add(new Flavour(line[f], premium, 1));
+                }
+            }
+        }
+
+        // Create Toppings List
+        List<Topping> toppings = new List<Topping>();
+        // Add toppings to topping list
+        for (int t = 11; t < 15; t++)
+        {
+            if (line[t] != "")
+            {
+                toppings.Add(new Topping(line[t]));
+            }
+        }
+
+        // Now we have figured out the general attributes of the ice cream - we must now figure out the icecream option
+        // check icecream type create the object, then add the object to order
+        if (line[4] == "Cup")
+        {
+            IceCream ic = new Cup(line[4], Convert.ToInt32(line[5]), flavours, toppings);
+        }
+        else if (line[4] == "Cone")
+        {
+            // check if cone is dipped
+            if (line[6] == "TRUE")
+            {
+                ordersList[Oindex].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavours, toppings, true));
+            }
+            else
+            {
+                ordersList[Oindex].IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavours, toppings, false));
+            }
+        }
+        else if (line[4] == "Waffle")
+        {
+            ordersList[Oindex].IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavours, toppings, line[7]));
+        }
     }
 
     else 
@@ -49,6 +120,7 @@ for (int i = 1; i < lines.Length; i++)
 
         // Create Flavour List
         List<Flavour> flavours = new List<Flavour>();
+        // loop through line index for flavours
         for (int f = 8; f < 11; f++)
         {   
             //check if flavour is not null
@@ -59,6 +131,7 @@ for (int i = 1; i < lines.Length; i++)
                 // increment quantity of flavour if true
                 if (TypeExist) 
                 {
+                    //find flavour in list by index + checking if type is the flavour
                     int index = flavours.FindIndex(item => item.Type == line[f]);
                     flavours[index].Quantity += 1;
                 }
@@ -78,7 +151,7 @@ for (int i = 1; i < lines.Length; i++)
                     }
 
                     flavours.Add(new Flavour(line[f],premium,1));
-                }  
+                }
             } 
         }
 
@@ -91,25 +164,39 @@ for (int i = 1; i < lines.Length; i++)
             {
                 toppings.Add(new Topping(line[t]));
             }
-        }
-        // Create Icecream object
-        
+        }   
 
-        // Painstakingly check icecream type and flavours and create the object
+        // Now we have figured out the general attributes of the ice cream - we must now figure out the icecream option
+        // check icecream type create the object, then add the object to order
         if (line[4] == "Cup")
         {
-            IceCream ic = new Cup();
+            IceCream ic = new Cup(line[4] ,Convert.ToInt32(line[5]) ,flavours ,toppings);
         }
         else if (line[4] == "Cone")
         {
-            IceCream ic = new Cone();
+            // check if cone is dipped
+            if (line[6] =="TRUE")
+            {
+                order.IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavours, toppings, true));
+            }
+            else
+            {
+                order.IceCreamList.Add(new Cone(line[4], Convert.ToInt32(line[5]), flavours, toppings, false));
+            }
         }
         else if (line[4] == "Waffle")
         {
-            IceCream ic = new Waffle();
+            order.IceCreamList.Add(new Waffle(line[4], Convert.ToInt32(line[5]), flavours, toppings, line[7]));
         }
+
+        // add order into list
+        ordersList.Add(order);
+
     }
 }
+
+
+
 //Main Program Loop
 void MenuStart()
 {

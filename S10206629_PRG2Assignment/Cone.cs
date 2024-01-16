@@ -1,6 +1,6 @@
 ﻿namespace S10206629_PRG2Assignment
 {
-    internal class Cone : IceCream
+     class Cone : IceCream
     {
         public bool Dipped {  get; set; }  
         public Cone() { }

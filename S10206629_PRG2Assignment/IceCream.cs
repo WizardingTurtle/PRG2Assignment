@@ -1,7 +1,7 @@
 ﻿
 namespace S10206629_PRG2Assignment
 {
-    internal abstract class IceCream
+     abstract class IceCream
     {
         public string Option {  get; set; }
         public int Scoops { get; set; }
