@@ -7,6 +7,7 @@
 // To add code to create customers and orders from data files
 // Read and create customers and pointcards based on customers.csv
 using S10206629_PRG2Assignment;
+using System.Diagnostics.Metrics;
 
 string fileName = ".\\datafiles\\customers.csv";
 string[] lines = File.ReadAllLines(fileName);
@@ -251,7 +252,7 @@ foreach (Order order in ordersList)
         }
         else if (option == "5")
         {
-        //Placeholder
+            displayCustomerOrder();
         }
         else if (option == "7")
         {
@@ -296,7 +297,39 @@ void listAllOrders()
 //Feature 4 Create a customer’s order
 
 //Feature 5 Display order details of a customer
+void displayCustomerOrder()
+{
+    // Display Customers
+    Console.WriteLine("{0,10} {1}", "Member Id", "Member Name");
+    foreach (Customer customer in customersList)
+    {
+        Console.WriteLine("{0,3} {1}",customer.MemberId,customer.Name);
+    }
+    Console.WriteLine();
 
+    // Input
+    Console.Write("Select a customer by ID: ");
+    int Id = Convert.ToInt32(Console.ReadLine());
+
+    // Display Customer's Orders
+    int index = customersList.FindIndex(c => c.MemberId == Id);
+    Console.WriteLine("Current Order");
+    if (customersList[index].CurrentOrder != null)
+    {
+        Console.WriteLine(customersList[index].CurrentOrder.ToString());
+    }
+    else
+    {
+        Console.WriteLine("No order");
+    }
+    Console.WriteLine();
+
+    Console.WriteLine("Past Orders");
+    foreach (Order order in customersList[index].OrderHistory)
+    {
+        Console.WriteLine(order.ToString());
+    }
+}
 //Feature 6 Modify order details
 
 
