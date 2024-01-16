@@ -22,19 +22,19 @@ for (int i = 1; i < lines.Length; i++)
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
 
-    customersList.Add(customer)
+    customersList.Add(customer);
 }
 
 // Read and create orders based on orders.csv
-string fileName = ".\\datafiles\\orders.csv";
-string[] lines = File.ReadAllLines(fileName);
+fileName = ".\\datafiles\\orders.csv";
+lines = File.ReadAllLines(fileName);
 List<Order> ordersList = new List<Order>();
 for (int i = 1; i < lines.Length; i++)
 {
     string[] line = lines[i].Split(',');
 
     // check if order exists before creating a new order
-    bool IdExist = ordersList.Any(item => item.Id == Convert.ToInt32(line[0]);
+    bool IdExist = ordersList.Any(item => item.Id == Convert.ToInt32(line[0]));
 
     if (IdExist) 
     {
@@ -44,7 +44,7 @@ for (int i = 1; i < lines.Length; i++)
     else 
     { 
         // Create order object
-        Order order = new Order(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]);
+        Order order = new Order(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]));
         order.TimeFulfilled = Convert.ToDateTime(line[3]);
 
         // Create Flavour List
@@ -52,28 +52,29 @@ for (int i = 1; i < lines.Length; i++)
         for (int f = 8; f < 11; f++)
         {   
             //check if flavour is not null
-            if (line[f] != '') 
+            if (line[f] != "") 
             {
                 //check if flavour exists in list
                 bool TypeExist = flavours.Any(item => item.Type == line[f]);
                 // increment quantity of flavour if true
                 if (TypeExist) 
                 {
-                    int index = myList.FindIndex(flav => flav.Contains(line[f]));
+                    int index = flavours.FindIndex(item => item.Type == line[f]);
                     flavours[index].Quantity += 1;
                 }
 
                 // Create flavour and add to list
                 else
                 {
+                    bool premium = false;
                     //check if flavour is premium
                     if (line[f] == "Durian" || line[f] == "Ube" || line[f] == "Sea Salt")
                     {
-                        bool premium = true; 
+                         premium = true; 
                     }
                     else
                     {
-                        bool premium = false;
+                         premium = false;
                     }
 
                     flavours.Add(new Flavour(line[f],premium,1));
@@ -86,13 +87,13 @@ for (int i = 1; i < lines.Length; i++)
         // Add toppings to topping list
         for (int t = 11; t < 15; t++)
         {
-            if (line[t] != '')
+            if (line[t] != "")
             {
-                toppings.Add(new Topping(line[t]))
+                toppings.Add(new Topping(line[t]));
             }
         }
         // Create Icecream object
-        IceCream ic = new IceCream(line[4], Convert.ToInt32(line[5]), flavours, toppings);
+        
 
         // Painstakingly check icecream type and flavours and create the object
         if (line[4] == "Cup")
@@ -108,13 +109,13 @@ for (int i = 1; i < lines.Length; i++)
             IceCream ic = new Waffle();
         }
     }
-
-    customersList.Add(customer)
 }
 //Main Program Loop
 void MenuStart()
 {
-    Console.WriteLine
+    while (true) 
+    {
+        Console.WriteLine
         (
         "-----      I.C.Treats Menu     -----\r\n" +
         "[1] List all customers\r\n" +
@@ -126,39 +127,40 @@ void MenuStart()
         "[0] Exit Program\r\n" +
         "------------------------------------"
         );
-    Console.Write("Please Choose an option");
-    String option = Console.ReadLine(); 
-    
-    if ( option = '1' )
-    {
+        Console.Write("Please Choose an option");
+        String option = Console.ReadLine();
+
+        if (option == "1")
+        {
         //Placeholder
-    }
-    else if (option = '2')
-    {
+        }
+        else if (option == "2")
+        {
         //Placeholder
-    }
-    else if (option = '3')
-    {
+        }
+        else if (option == "3")
+        {
         //Placeholder
-    }
-    else if (option = '4')
-    {
+        }
+        else if (option == "4")
+        {
         //Placeholder
-    }
-    else if (option = '5')
-    {
+        }
+        else if (option == "5")
+        {
         //Placeholder
-    }
-    else if (option = '6')
-    {
+        }
+        else if (option == "7")
+        {
         //Placeholder
-    }
-    else if (option = '0')
-    {
+        }
+        else if (option == "0")
+        {
         Console.WriteLine("Closing the program - bye bye!");
         break;
+        }
     }
-
+}
 //Feature 1 List all customers
 
 //Feature 2 List all current orders
