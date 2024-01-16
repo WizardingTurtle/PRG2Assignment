@@ -28,7 +28,10 @@ for (int i = 1; i < lines.Length; i++)
 // Read and create orders based on orders.csv
 fileName = ".\\datafiles\\orders.csv";
 lines = File.ReadAllLines(fileName);
+// Create orderList and memberOrderDic 
 List<Order> ordersList = new List<Order>();
+Dictionary<int, int> memberOrderDic = new Dictionary<int, int>();
+// loop through lines of orders.csv
 for (int i = 1; i < lines.Length; i++)
 {
     string[] line = lines[i].Split(',');
@@ -89,7 +92,7 @@ for (int i = 1; i < lines.Length; i++)
         }
 
         // Now we have figured out the general attributes of the ice cream - we must now figure out the icecream option
-        // check icecream type create the object, then add the object to order
+        // check icecream type create the object, then add the object to order in orderlist
         if (line[4] == "Cup")
         {
             IceCream ic = new Cup(line[4], Convert.ToInt32(line[5]), flavours, toppings);
@@ -113,7 +116,9 @@ for (int i = 1; i < lines.Length; i++)
     }
 
     else 
-    { 
+    {
+        // add memberid and orderid into a dictionary
+        memberOrderDic.Add(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]));
         // Create order object
         Order order = new Order(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]));
         order.TimeFulfilled = Convert.ToDateTime(line[3]);
@@ -195,10 +200,21 @@ for (int i = 1; i < lines.Length; i++)
     }
 }
 
+// Add orders to customer order history
+foreach (Order order in ordersList) 
+{
+    // check if order id exist in memberorderdic
+    if(memberOrderDic.Any(item => item.Key == order.Id))
+    {
+        // Find index of customer in customer list
+        int index = customersList.FindIndex(item => item.MemberId == memberOrderDic[order.Id]);
+        customersList[index].OrderHistory.Add(order);
 
+    }
+}
 
-//Main Program Loop
-void MenuStart()
+    //Main Program Loop
+    void MenuStart()
 {
     while (true) 
     {
@@ -258,4 +274,4 @@ void MenuStart()
 
 //Feature 5 Display order details of a customer
 
-//Feature 6 ) Modify order details
+//Feature 6 Modify order details

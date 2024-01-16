@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class Customer
+ class Customer
 {
     // Initiliaze
     public string Name { get; set; }
