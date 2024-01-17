@@ -23,7 +23,7 @@ using System.Collections.Generic;
     // Class methods
     public void ModifyIceCream(int iceCreamIndex)
     {
-        // to edit later when question is being done
+        
     }
 
     public void AddIceCream(IceCream iceCream)

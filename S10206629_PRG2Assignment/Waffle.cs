@@ -49,5 +49,10 @@ namespace S10206629_PRG2Assignment
 
             return price;
         }
+
+        public override string ToString()
+        {
+            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + Flavours + " Toppings: " + Toppings + " Waffle Flavour: " + WaffleFlavour;
+        }
     }
 }

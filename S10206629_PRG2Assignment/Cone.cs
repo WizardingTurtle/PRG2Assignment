@@ -43,5 +43,10 @@
 
             return price;
         }
+
+        public override string ToString()
+        {
+            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + Flavours + " Toppings: " + Toppings + " Dipped: " + Dipped;
+        }
     }
 }

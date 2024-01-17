@@ -8,6 +8,7 @@
 // Read and create customers and pointcards based on customers.csv
 using S10206629_PRG2Assignment;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 
 string fileName = ".\\datafiles\\customers.csv";
@@ -266,6 +267,7 @@ foreach (Order order in ordersList)
         }
     }
 }
+
 //Feature 1 List all customers
 void listAllCustomers()
 {
@@ -342,18 +344,219 @@ void modifyCustomerOrder()
     }
     Console.WriteLine();
 
-    // Input
+    // Find customer
     Console.Write("Select a customer by ID: ");
     int Id = Convert.ToInt32(Console.ReadLine());
 
+    // Get index of customer in customerlist and display the icecreams of the currentorder
     int index = customersList.FindIndex(c => c.MemberId == Id);
     if (customersList[index].CurrentOrder != null)
     {
         Console.WriteLine("Icecreams in current order");
+        Console.WriteLine("{0,8} {1}", "Index", "Details");
         foreach (IceCream ic in customersList[index].CurrentOrder.IceCreamList)
         {
-            Console.WriteLine(ic.ToString());
-        }    
+            // find index of icecream in list
+            int indexic = customersList[index].CurrentOrder.IceCreamList.FindIndex(i => i == ic);
+            Console.WriteLine("{0,8}. {1}",indexic+1, ic.ToString());
+        }
+
+        Console.WriteLine();
+        Console.WriteLine
+            (
+            "------------------------------------\r\n" +
+            "[1] choose an existing ice cream object to modify\r\n" +
+            "[2] add an entirely new ice cream object to the order\r\n" +
+            "[3] choose an existing ice cream object to delete from the order\r\n" +
+            "------------------------------------"
+            );
+        Console.WriteLine();
+
+        Console.Write("Choose an option: ");
+        string option = Console.ReadLine();
+         
+        if (option == "1")
+        {
+            // user inputs index
+            Console.Write("Choose an ice cream by index: ");
+            int indexic = Convert.ToInt32(Console.ReadLine())-1;
+            // Display icecream details
+            Console.WriteLine(customersList[index].CurrentOrder.IceCreamList[indexic].ToString());
+            // Modify icecream details
+            customersList[index].CurrentOrder.ModifyIceCream(indexic);
+        }
+        else if (option == "2")
+        {
+            // Choosing Ice-Cream Option
+            Console.WriteLine(
+                "-----     Ice-Cream options    -----\r\n" +
+                "Cup\r\n" +
+                "Cone\r\n" +
+                "Waffle\r\n" +
+                "------------------------------------");
+            Console.Write("Enter the Ice-Cream option: ");
+            string type = Console.ReadLine();
+
+            // Choose from 1-3 scoops
+            int scoops = 1;
+            Console.Write("Enter the number of scoops: ");
+            string read = Console.ReadLine();
+            if (read == "1" || read == "2" || read == "3") 
+            {
+                scoops = Convert.ToInt32(read);
+            }
+            else
+            {
+                Console.WriteLine("Invalid scoop count");
+            }
+                       
+            Console.WriteLine(
+                "-----     IceCream Flavours    -----\r\n" +
+                "Vanilla\r\n" +
+                "Chocolate\r\n" +
+                "Strawberry\r\n" +
+                "Durian\r\n" +
+                "Ube\r\n" +
+                "Sea salt\r\n" +
+                "------------------------------------");
+            Console.WriteLine();
+
+            // Adding Flavours
+            List<Flavour> flavList = new List<Flavour>();
+            for (int i = 0 ;i < scoops+1 ;i++)
+            {
+                Console.Write("Enter Flavour {0}: ",i);
+                string flav = Console.ReadLine();
+                if (flav == "Vanilla" || flav == "Chocolate" || flav == "Strawberry" || flav == "Durian" || flav == "Ube" || flav == "Sea Salt")
+                {
+                    bool TypeExist = flavList.Any(item => item.Type == flav);
+                    // increment quantity of flavour if true
+                    if (TypeExist)
+                    {
+                        //find flavour in list by index + checking if type is the flavour
+                        int ind = flavList.FindIndex(item => item.Type == flav);
+                        flavList[ind].Quantity += 1;
+                    }
+
+                    // Create flavour and add to list
+                    else
+                    {
+                        bool premium = false;
+                        //check if flavour is premium
+                        if (flav == "Durian" || flav == "Ube" || flav == "Sea Salt")
+                        {
+                            premium = true;
+                        }
+                        else
+                        {
+                            premium = false;
+                        }
+
+                        flavList.Add(new Flavour(flav, premium, 1));
+                    }
+                }
+                else
+                {
+                    --i;
+                    Console.WriteLine("invalid flavour");
+                }
+            }
+            // Adding Toppings
+            List<Topping> topList = new List<Topping>();
+            // Choose from 0-4 Toppings
+            int toppings = 0;
+            Console.Write("Enter the number of toppings: ");
+            read = Console.ReadLine();
+            if (read == "1" || read == "2" || read == "3" || read == "4")
+            {
+                toppings = Convert.ToInt32(read);
+                for (int i = 0; i < toppings + 1; i++)
+                {
+                    Console.Write("Enter Topping {0}: ", i);
+                    string top = Console.ReadLine();
+                    if (top == "Sprinkles" || top == "Mochi" || top == "Sago" || top == "Oreos")
+                    {
+                        topList.Add(new Topping(top));
+                    }
+                    else
+                    {
+                        --i;
+                        Console.WriteLine("invalid topping");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid toppings count");
+            }
+
+            // check ice cream type and add to selected order list
+            if (type == "Cup")
+            {
+                IceCream ic = new Cup(type, scoops, flavList, topList);
+                Console.WriteLine("Ice cream cup added to current order!");
+            }
+            else if (type == "Cone")
+            {
+                // check if cone is dipped                
+                bool dip = false;
+                while (true) 
+                {
+                    Console.Write("Enter yes or no if cone is dipped: ");
+                    read = Console.ReadLine();
+                    if (read.ToLower() == "yes")
+                    {
+                        dip = true;
+                        break;
+                    }
+                    else if (read.ToLower() == "no")
+                    {
+                        dip = false;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("invalid response");
+                    }
+                }
+                customersList[index].CurrentOrder.IceCreamList.Add(new Cone(type, scoops, flavList, topList, dip));
+                Console.WriteLine("Ice cream cone added to current order!");
+            }
+            else if (type == "Waffle")
+            {
+                string wafFlav = "Original";
+                while (true)
+                {
+                    Console.Write("Enter Waffle Flavour: ");
+                    read = Console.ReadLine();
+                    if (read == "Original" || read == "Red Velvet" || read =="Charcoal" || read == "Pandan")
+                    {
+                        wafFlav = read;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Waffle Flavour");
+                    }
+                }
+                customersList[index].CurrentOrder.IceCreamList.Add(new Waffle(type, scoops, flavList, topList, wafFlav));
+                Console.WriteLine("Ice cream waffle added to current order!");
+            }
+
+
+        }
+        else if (option == "3")
+        {
+            if (customersList[index].CurrentOrder.IceCreamList.Count > 1)
+            {
+                Console.Write("Choose an ice cream to remove by index: ");
+                int indexic = Convert.ToInt32(Console.ReadLine()) - 1;
+            }
+            else
+            {
+                Console.WriteLine("Order must always have at least one ice cream");
+            }       
+        }
     }
     else
     {
