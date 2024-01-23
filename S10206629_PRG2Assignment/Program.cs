@@ -19,8 +19,9 @@ for (int i = 1; i < lines.Length; i++)
 {
     string[] line = lines[i].Split(',');
 
+    Console.WriteLine(line[2]);
     // create customer
-    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), Convert.ToDateTime(line[2]));
+    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2],"dd/MM/yyyy",null));
     // modify customer's point card
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
@@ -123,8 +124,8 @@ for (int i = 1; i < lines.Length; i++)
         // add memberid and orderid into a dictionary
         memberOrderDic.Add(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]));
         // Create order object
-        Order order = new Order(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]));
-        order.TimeFulfilled = Convert.ToDateTime(line[3]);
+        Order order = new Order(Convert.ToInt32(line[0]), DateTime.ParseExact(line[2], "dd/MM/yyyy HH:mm", null));
+        order.TimeFulfilled = DateTime.ParseExact(line[3], "dd/MM/yyyy HH:mm", null);
 
         // Create Flavour List
         List<Flavour> flavours = new List<Flavour>();
