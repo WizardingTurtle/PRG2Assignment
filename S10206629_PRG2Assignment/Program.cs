@@ -16,8 +16,13 @@ for (int i = 1; i < lines.Length; i++)
 {
     string[] line = lines[i].Split(',');
 
+    Console.WriteLine(line[2]);
     // create customer
+<<<<<<< HEAD
     Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2], "dd/MM/yyyy", null));
+=======
+    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2],"dd/MM/yyyy",null));
+>>>>>>> d745195ed38729e52d3abe6351fe3a8dd803a550
     // modify customer's point card
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
