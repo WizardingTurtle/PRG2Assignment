@@ -7,9 +7,6 @@
 // To add code to create customers and orders from data files
 // Read and create customers and pointcards based on customers.csv
 using S10206629_PRG2Assignment;
-using System;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
 
 string fileName = ".\\datafiles\\customers.csv";
 string[] lines = File.ReadAllLines(fileName);
@@ -20,7 +17,7 @@ for (int i = 1; i < lines.Length; i++)
     string[] line = lines[i].Split(',');
 
     // create customer
-    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), Convert.ToDateTime(line[2]));
+    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2], "dd/MM/yyyy", null));
     // modify customer's point card
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
@@ -123,8 +120,8 @@ for (int i = 1; i < lines.Length; i++)
         // add memberid and orderid into a dictionary
         memberOrderDic.Add(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]));
         // Create order object
-        Order order = new Order(Convert.ToInt32(line[0]), Convert.ToDateTime(line[2]));
-        order.TimeFulfilled = Convert.ToDateTime(line[3]);
+        Order order = new Order(Convert.ToInt32(line[0]), DateTime.ParseExact(line[2], "dd/MM/yyyy HH:mm", null));
+        order.TimeFulfilled = DateTime.ParseExact(line[3], "dd/MM/yyyy HH:mm", null);
 
         // Create Flavour List
         List<Flavour> flavours = new List<Flavour>();
@@ -157,7 +154,6 @@ for (int i = 1; i < lines.Length; i++)
                     {
                          premium = false;
                     }
-
                     flavours.Add(new Flavour(line[f],premium,1));
                 }
             } 
@@ -280,7 +276,7 @@ void listAllOrders()
     Console.WriteLine("Gold member's current orders");
     foreach (Customer customer in customersList)
     {
-        if (customer.Rewards.Tier == "Gold")
+        if (customer.Rewards.Tier == "Gold" && customer.CurrentOrder != null)
         {
             Console.WriteLine(customer.CurrentOrder.ToString());
         }
@@ -289,7 +285,7 @@ void listAllOrders()
     Console.WriteLine("Regular queue current orders");
     foreach (Customer customer in customersList)
     {
-        if (customer.Rewards.Tier != "Gold")
+        if (customer.Rewards.Tier != "Gold" && customer.CurrentOrder != null)
         {
             Console.WriteLine(customer.CurrentOrder.ToString());
         }
@@ -303,16 +299,24 @@ void listAllOrders()
 void displayCustomerOrder()
 {
     // Display Customers
-    Console.WriteLine("{0,10} {1}", "Member Id", "Member Name");
+    Console.WriteLine();
+    Console.WriteLine("{0,-10} {1}", "Member Id", "Member Name");
     foreach (Customer customer in customersList)
     {
-        Console.WriteLine("{0,3} {1}",customer.MemberId,customer.Name);
+        Console.WriteLine("{0,-10} {1}",customer.MemberId,customer.Name);
     }
     Console.WriteLine();
 
     // Input
     Console.Write("Select a customer by ID: ");
-    int Id = Convert.ToInt32(Console.ReadLine());
+
+    // checks if input is valid else return to menu
+    int Id = 0;
+    if(!int.TryParse(Console.ReadLine(), out Id))
+    {
+        Console.WriteLine("Invalid ID");
+        return;
+    }
 
     // Display Customer's Orders
     int index = customersList.FindIndex(c => c.MemberId == Id);
@@ -332,6 +336,7 @@ void displayCustomerOrder()
     {
         Console.WriteLine(order.ToString());
     }
+    Console.WriteLine();
 }
 //Feature 6 Modify order details
 void modifyCustomerOrder()
@@ -380,8 +385,6 @@ void modifyCustomerOrder()
             // user inputs index
             Console.Write("Choose an ice cream by index: ");
             int indexic = Convert.ToInt32(Console.ReadLine())-1;
-            // Display icecream details
-            Console.WriteLine(customersList[index].CurrentOrder.IceCreamList[indexic].ToString());
             // Modify icecream details
             customersList[index].CurrentOrder.ModifyIceCream(indexic);
         }
@@ -498,7 +501,7 @@ void modifyCustomerOrder()
             }
             else if (type == "Cone")
             {
-                // check if cone is dipped                
+                // check if cone is dipped --- imprison the user until they get it right               
                 bool dip = false;
                 while (true) 
                 {
@@ -525,6 +528,8 @@ void modifyCustomerOrder()
             else if (type == "Waffle")
             {
                 string wafFlav = "Original";
+                // imprison the user if they get it wrong
+                Console.WriteLine();
                 while (true)
                 {
                     Console.Write("Enter Waffle Flavour: ");

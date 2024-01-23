@@ -20,7 +20,7 @@ namespace S10206629_PRG2Assignment
         }
         public override string ToString()
         {
-            return Type + Premium + Quantity;
+            return "Type: "+ Type +" Premium: "+ Premium +" Quantity: " + Quantity;
         }
     }
 }
