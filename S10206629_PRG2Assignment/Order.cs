@@ -29,8 +29,8 @@ using S10206629_PRG2Assignment;
             // display info and get user to do something
             Console.WriteLine(
             "1. Modify Ice Cream Details\r\n" +
-            "2. Delete Ice Cream" +
-            "0. Return to Menu");
+            "2. Delete Ice Cream\r\n" +
+            "0. Return to Menu\r\n");
             Console.Write("Select an option: ");
 
             string option = Console.ReadLine();
@@ -273,34 +273,198 @@ using S10206629_PRG2Assignment;
                     }
                     else if (property == "Toppings")
                     {
+                        while (true)
+                        {
+                            // display toppings in list and prompt user to add, remove or change
+                            Console.WriteLine("--- Toppings ---");
+                            foreach (Topping top in IceCreamList[iceCreamIndex].Toppings)
+                            {
+                                Console.WriteLine(top.ToString());
+                            }
+                            Console.WriteLine("----------------");
 
+                            Console.WriteLine(
+                                "------   Option   ------\r\n" +
+                                "1. Add a topping\r\n" +
+                                "2. Remove a topping\r\n" +
+                                "3. Change a topping\r\n" +
+                                "0. return to modify menu\r\n" +
+                                "------------------------");
+                            Console.Write("Enter option: ");
+                            string read = Console.ReadLine();
+
+                            // Add topping code
+                            if (read == "1")
+                            {
+                                if (IceCreamList[iceCreamIndex].Toppings.Count <4)
+                                {
+                                    Console.WriteLine("\r\n" +
+                                        "--- Toppings ---\r\n" +
+                                        "<O Sprinkles\r\n" +
+                                        "<O Mochi\r\n" +
+                                        "<O Sago\r\n" +
+                                        "<O Oreos\r\n" +
+                                        "----------------");
+                                    Console.WriteLine();
+                                    // prompt user to enter topping name and then add it to the list
+                                    Console.Write("Enter the desired topping: ");
+                                    string topping = Console.ReadLine();
+                                    if (topping == "Sprinkles" || topping == "Mochi" || topping == "Sago" || topping == "Oreos")
+                                    {
+                                        IceCreamList[iceCreamIndex].Toppings.Add(new Topping(topping));
+                                        Console.WriteLine("{0} topping successfully added", topping);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid Topping");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Ice cream already has 4 toppings, remove or change a topping");
+                                }
+                            }
+                            // remove topping code
+                            else if (read == "2")
+                            {
+                                // remove topping if there is at least 1 in the list
+                                if (IceCreamList[iceCreamIndex].Toppings.Count > 0)
+                                {
+                                    Console.Write("Enter topping to remove: ");
+                                    string topping = Console.ReadLine();
+                                    if (IceCreamList[iceCreamIndex].Toppings.Any(t => t.Type == topping))
+                                    {
+                                        int index = IceCreamList[iceCreamIndex].Toppings.FindIndex(item => item.Type == topping);
+                                        IceCreamList[iceCreamIndex].Toppings.RemoveAt(index);
+                                        Console.WriteLine("{0} topping successfully removed", topping);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Are you blind? THERE ARE NO TOPPINGS!");
+                                }
+                            }
+                            else if (read == "3")
+                            {
+                                if (IceCreamList[iceCreamIndex].Toppings.Count > 0)
+                                {
+                                    Console.Write("Enter topping to change: ");
+                                    string topping = Console.ReadLine();
+                                    if (IceCreamList[iceCreamIndex].Toppings.Any(t => t.Type == topping))
+                                    {
+                                        // remember index and then reuse topping string as prompt for new topping
+                                        int index = IceCreamList[iceCreamIndex].Toppings.FindIndex(item => item.Type == topping);
+
+                                        Console.WriteLine("\r\n" +
+                                        "--- Toppings ---\r\n" +
+                                        "<O Sprinkles\r\n" +
+                                        "<O Mochi\r\n" +
+                                        "<O Sago\r\n" +
+                                        "<O Oreos\r\n" +
+                                        "----------------");
+                                        Console.WriteLine();
+
+                                        Console.Write("Enter new topping: ");
+                                        topping = Console.ReadLine();
+                                        if (topping == "Sprinkles" || topping == "Mochi" || topping == "Sago" || topping == "Oreos")
+                                        {
+                                            string oldTop = IceCreamList[iceCreamIndex].Toppings[index].Type;
+                                            IceCreamList[iceCreamIndex].Toppings[index].Type = topping;
+                                            Console.WriteLine("{0} topping successfully changed to {1}", oldTop, topping);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Are you blind? THERE ARE NO TOPPINGS!");
+                                }
+                            }
+                            else if (read == "0")
+                            {
+                                Console.WriteLine("Returning to modify menu");
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid Option");
+                            }
+                        }
                     }
+                    // last 2 else ifs check if the object is of a specific class before changing the respective attributess
                     else if (property == "dipped")
                     {
-
+                        
+                        if (IceCreamList[iceCreamIndex] is Cone coneD && coneD.Dipped == true)
+                        {
+                            coneD.Dipped = false;
+                            Console.WriteLine("Ice cream cone has been set to undipped");
+                        }
+                        else if (IceCreamList[iceCreamIndex] is Cone coneU && coneU.Dipped == false)
+                        {
+                            coneU.Dipped = true;
+                            Console.WriteLine("Ice cream cone has been set to dipped");
+                        }
+                        else {Console.WriteLine("Ice Cream is not a cone");}
                     }
                     else if (property == "waffleflavour")
                     {
+                        if (IceCreamList[iceCreamIndex] is Waffle waffle)
+                        {
+                            Console.WriteLine(
+                                "--- Waffle Flavours ---\r\n" +
+                                "<O Original\r\n" +
+                                "<O Red Velvet\r\n" +
+                                "<O Charcoal\r\n" +
+                                "<O Pandan\r\n" +
+                                "-----------------------");
+                            Console.WriteLine();
 
+                            Console.Write("Enter new waffle flavour: ");
+                            string read = Console.ReadLine();
+                            if (read == "Original" || read == "Red Velvet" || read == "Charcoal" || read == "Pandan")
+                            {
+                                if (read == waffle.WaffleFlavour)
+                                {
+                                    Console.WriteLine("Mate that's already the flavour of the waffle");
+                                }
+                                else
+                                {
+                                    waffle.WaffleFlavour = read;
+                                    Console.WriteLine("Waffle flavour successfully changed to {0}", read);
+                                }
+                            }
+                            else {Console.WriteLine("Invalid Waffle Flavour");}
+                        }
+                        else {Console.WriteLine("Ice Cream is not a waffle");}
                     }
-                    }
-                } 
-
-            // delete ice cream option
+                    else {Console.WriteLine("Invalid property name");}
+                }
+            } 
+            // delete ice cream and return to menu
             else if (option == "2")
             {
+                // important prompt incase user big finger's option not on purpose
+                Console.Write("ARE YOU SURE? Enter DELETE to confirm or enter anything else to invalidate operation: ");
+                string read = Console.ReadLine ();
 
+                if (read == "DELETE")
+                {
+                    IceCreamList.RemoveAt(iceCreamIndex);
+                    Console.WriteLine("Ice Cream removed, returning to menu\r\n");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Operation invalid, returning to modify menu\r\n");
+                }
             }
-            // do nothing and go back to main code in shame
+            // changes are saved and user goes back to main code in shame
             else if (option == "0")
             {
                 Console.WriteLine("Returning to menu");
                 return;
             }
         }
-
-        
-
     }
 
     public void AddIceCream(IceCream iceCream)

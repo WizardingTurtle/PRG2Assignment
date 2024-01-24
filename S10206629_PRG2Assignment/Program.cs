@@ -16,13 +16,8 @@ for (int i = 1; i < lines.Length; i++)
 {
     string[] line = lines[i].Split(',');
 
-    Console.WriteLine(line[2]);
     // create customer
-<<<<<<< HEAD
     Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2], "dd/MM/yyyy", null));
-=======
-    Customer customer = new Customer(line[0], Convert.ToInt32(line[1]), DateTime.ParseExact(line[2],"dd/MM/yyyy",null));
->>>>>>> d745195ed38729e52d3abe6351fe3a8dd803a550
     // modify customer's point card
     customer.Rewards = new PointCard(Convert.ToInt32(line[4]), Convert.ToInt32(line[5]));
     customer.Rewards.PunchCard= Convert.ToInt32(line[5]);
@@ -325,6 +320,7 @@ void displayCustomerOrder()
 
     // Display Customer's Orders
     int index = customersList.FindIndex(c => c.MemberId == Id);
+    Console.WriteLine();
     Console.WriteLine("Current Order");
     if (customersList[index].CurrentOrder != null)
     {
@@ -356,7 +352,22 @@ void modifyCustomerOrder()
 
     // Find customer
     Console.Write("Select a customer by ID: ");
-    int Id = Convert.ToInt32(Console.ReadLine());
+
+    // check if ID is not a proper int
+    int Id = 0;
+    if (!int.TryParse(Console.ReadLine(), out Id))
+    {
+        Console.WriteLine("Invalid ID");
+        return;
+    }
+
+    // Check if ID exists else return to main menu
+    bool IdNoExist = customersList.Any(c => c.MemberId == Id) == false;
+    if (IdNoExist)
+    {
+        Console.WriteLine("ID does not exist");
+        return;
+    }
 
     // Get index of customer in customerlist and display the icecreams of the currentorder
     int index = customersList.FindIndex(c => c.MemberId == Id);
@@ -534,6 +545,13 @@ void modifyCustomerOrder()
             {
                 string wafFlav = "Original";
                 // imprison the user if they get it wrong
+                Console.WriteLine(
+                    "--- Waffle Flavours ---\r\n" +
+                    "<O Original\r\n" +
+                    "<O Red Velvet\r\n" +
+                    "<O Charcoal\r\n" +
+                    "<O Pandan\r\n" +
+                    "-----------------------");
                 Console.WriteLine();
                 while (true)
                 {
