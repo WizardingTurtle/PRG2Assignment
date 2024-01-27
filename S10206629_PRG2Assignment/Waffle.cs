@@ -52,7 +52,19 @@ namespace S10206629_PRG2Assignment
 
         public override string ToString()
         {
-            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + Flavours + " Toppings: " + Toppings + " Waffle Flavour: " + WaffleFlavour;
+            string flavs = "";
+            foreach (Flavour flav in Flavours)
+            {
+                flavs += flav.Quantity.ToString() + " ";
+                flavs += flav.Type + " ";
+            }
+            string tops = "";
+            foreach (Topping top in Toppings)
+            {
+                tops += top.Type + " ";
+            }
+
+            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + flavs + " Toppings: " + tops + " Waffle Flavour: " + WaffleFlavour;
         }
     }
 }
