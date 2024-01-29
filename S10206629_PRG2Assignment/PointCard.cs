@@ -61,11 +61,6 @@ using System.Collections.Generic;
     public void Punch()
     {
         PunchCard += 1;
-        if (PunchCard == 10)
-        {
-            Console.WriteLine("11th ice cream is free, resetting punch card to zero");
-            PunchCard = 0;
-        }
     }
 
     public override string ToString()

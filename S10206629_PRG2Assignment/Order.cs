@@ -15,6 +15,7 @@ using S10206629_PRG2Assignment;
         Id = id;
         TimeReceived = timeReceived;
         IceCreamList = new List<IceCream>();
+        TimeFulfilled = null;
     }
 
     // Class methods
@@ -55,7 +56,7 @@ using S10206629_PRG2Assignment;
                         IceCreamList[iceCreamIndex].ToString());
 
                     Console.Write(
-                        "Select which property of the ice cream you want to modify\r\n" +
+                        "Select which property of the ice c ream you want to modify\r\n" +
                         "Type 0 to return to menu\r\n" +
                         "------------------------------------\r\n" +
                         "Enter property or return to menu: ");

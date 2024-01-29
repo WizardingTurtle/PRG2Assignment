@@ -4,13 +4,14 @@
 // Partner Name : Goh Jun Kai
 //==========================================================
 
-// To add code to create customers and orders from data files
-// Read and create customers and pointcards based on customers.csv
 using S10206629_PRG2Assignment;
+using System;
+using System.Security.Cryptography.X509Certificates;
 
 string fileName = ".\\datafiles\\customers.csv";
 string[] lines = File.ReadAllLines(fileName);
 
+// initialize customerlist from customer.csv
 List<Customer> customersList = new List<Customer>();
 for (int i = 1; i < lines.Length; i++)
 {
@@ -29,6 +30,7 @@ for (int i = 1; i < lines.Length; i++)
 fileName = ".\\datafiles\\orders.csv";
 lines = File.ReadAllLines(fileName);
 
+// initalize orderlist and memberOrderDic
 // Create orderList and memberOrderDic 
 List<Order> ordersList = new List<Order>();
 Dictionary<int, int> memberOrderDic = new Dictionary<int, int>();
@@ -119,7 +121,7 @@ for (int i = 1; i < lines.Length; i++)
     // creates new order
     else 
     {
-        // add memberid and orderid into a dictionary
+        // add memberidI(value) and orderid(Key) into a dictionary
         memberOrderDic.Add(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]));
         // Create order object
         Order order = new Order(Convert.ToInt32(line[0]), DateTime.ParseExact(line[2], "dd/MM/yyyy HH:mm", null));
@@ -213,11 +215,44 @@ foreach (Order order in ordersList)
     }
 }
 
+// Initialize Queue
+Queue<Order> GoldQueue = new Queue<Order>();
+Queue<Order> RegularQueue = new Queue<Order>();
+
+void InitializeQueue()
+{
+    foreach (Customer customer in customersList)
+    {
+        // checks for 3 conditions
+        // current order exists, current order has more than 1 icecream, current order does not exist in either queue, current order is not fulfilled
+        if (customer.CurrentOrder != null && customer.CurrentOrder.IceCreamList.Count > 0 && customer.CurrentOrder.TimeFulfilled == null)
+        {
+            bool NotExistGQ = GoldQueue.Any(o => o.Id == customer.CurrentOrder.Id) == false;
+            bool NotExistRQ = RegularQueue.Any(o => o.Id == customer.CurrentOrder.Id) == false;
+            if (NotExistGQ && NotExistRQ)
+            {
+                if (customer.Rewards.Tier == "Gold")
+                {
+                    GoldQueue.Enqueue(customer.CurrentOrder);
+                }
+                else
+                {
+                    RegularQueue.Enqueue(customer.CurrentOrder);
+                }
+            }
+        }
+    }
+}
+
+
     //Main Program Loop
     void MenuStart()
 {
     while (true) 
     {
+        // Update Queues
+        InitializeQueue();
+
         Console.WriteLine
         (
         "-----      I.C.Treats Menu     -----\r\n" +
@@ -227,6 +262,7 @@ foreach (Order order in ordersList)
         "[4] Create a customer's order\r\n" +
         "[5] Display order details of customer\r\n" +
         "[6] Modify order details\r\n" +
+        "[9] Advanced Features\r\n" +
         "[0] Exit Program\r\n" +
         "------------------------------------"
         );
@@ -257,6 +293,10 @@ foreach (Order order in ordersList)
         {
             modifyCustomerOrder();
         }
+        else if (option == "9")
+        {
+            AMenuStart();
+        }
         else if (option == "0")
         {
         Console.WriteLine("Closing the program - bye bye!");
@@ -276,28 +316,61 @@ void listAllOrders()
     Console.WriteLine();
     // List Gold Member Current Orders
     Console.WriteLine("Gold member's current orders");
-    foreach (Customer customer in customersList)
+    foreach (Order currentOrder in GoldQueue)
     {
-        if (customer.Rewards.Tier == "Gold" && customer.CurrentOrder != null)
-        {
-            Console.WriteLine(customer.CurrentOrder.ToString());
-        }
+            Console.WriteLine(currentOrder.ToString());
     }
     // List regular queue Current Orders
     Console.WriteLine("Regular queue current orders");
-    foreach (Customer customer in customersList)
+    foreach (Order currentOrder in RegularQueue)
     {
-        if (customer.Rewards.Tier != "Gold" && customer.CurrentOrder != null)
-        {
-            Console.WriteLine(customer.CurrentOrder.ToString());
-        }
+        Console.WriteLine(currentOrder.ToString());
     }
     Console.WriteLine();
 }
 //Feature 3 Register a new customer
+void RegisterNewCustomer()
+{
+    // Prompt user for customer information
+    Console.Write("Enter customer name: ");
+    string name = Console.ReadLine();
+
+    Console.Write("Enter customer ID number: ");
+    int idNumber = Convert.ToInt32(Console.ReadLine());
+
+    Console.Write("Enter customer date of birth (dd/MM/yyyy): ");
+    DateTime dob = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+
+    // Create a customer object with the provided information
+    Customer newCustomer = new Customer(name, idNumber, dob);
+
+    // Create a PointCard object and assign it to the customer
+    newCustomer.Rewards = new PointCard(0, 0);
+
+    // You might want to initialize points and punch card values based on your logic
+    // Append the customer information to the customers.csv file
+    AppendCustomerToCSV(newCustomer);
+
+    // Add the new customer to the list
+    customersList.Add(newCustomer);
+    Console.WriteLine("Customer registered successfully!");
+}
 
 //Feature 4 Create a customer’s order
-
+static void AppendCustomerToCSV(Customer customer)
+{
+    try
+    {        // Append the customer information to the customers.csv file
+        using (StreamWriter sw = File.AppendText("C:\\Users\\user\\Downloads\\ProgrammingAs\\ProgramminAssign\\ProgramminAssign\\datafiles\\customers.csv"))
+        {
+            sw.WriteLine($"{customer.Name},{customer.MemberId},{customer.Dob.ToString("dd/MM/yyyy")},{customer.Rewards.Tier},{customer.Rewards.Points},{customer.Rewards.PunchCard}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error appending customer to CSV: {ex.Message}");
+    }
+}
 //Feature 5 Display order details of a customer
 void displayCustomerOrder()
 {
@@ -656,7 +729,7 @@ void modifyCustomerOrder()
 
                 if (read == "DELETE")
                 {
-                    customersList[index].CurrentOrder.IceCreamList.RemoveAt(indexic);
+                    customersList[index].CurrentOrder.DeleteIceCream(indexic);
                     Console.WriteLine("Ice Cream removed, returning to menu\r\n");
                     return;
                 }
@@ -677,9 +750,234 @@ void modifyCustomerOrder()
     }
 }
 
+
+// {>>> ADVANCED FEATURES <<<}
+
+// Advanced Menu
+void AMenuStart()
+{
+    while (true)
+    {
+        InitializeQueue();
+        foreach (Order order in RegularQueue)
+        {
+            Console.WriteLine(order.ToString());
+            foreach (IceCream ic in order.IceCreamList)
+            {
+                ic.ToString();
+            }
+            Console.WriteLine(order.IceCreamList.Count);
+        }
+
+
+        Console.WriteLine();
+        Console.WriteLine(
+            "----- <<< Advanced Features Menu >>> -----\r\n" +
+            "[1] Process an order and checkout\r\n" +
+            "[2] Display monthly charged amounts breakdown\r\n" +
+            "    & total charged amounts for the year\r\n" +
+            "[0] Return to Main Menu\r\n" +
+            "------------------------------------------");
+        Console.Write("Enter an option: ");
+        string option = Console.ReadLine();
+        // feature a
+        if (option == "1")
+        {
+            advancedProcessOC();
+        }
+        // feature b 
+        else if (option == "2")
+        {  
+            advancedDisplayChargedAmounts();
+        }
+        else if (option == "0")
+        {
+            Console.WriteLine("Exiting Advanced Menu, returning to Main Menu\r\n");
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Invalid Option\r\n");
+        }    
+    }
+}
+
+// a Process an order and checkout
+void advancedProcessOC()
+{
+    Order firstOrder = null;
+    // check & dequeue for goldqueue before regular queue - return if no orders in either queues
+    if (GoldQueue.Count > 0)
+    {
+        firstOrder = GoldQueue.Dequeue();
+    }
+    else if (RegularQueue.Count > 0)
+    {
+        firstOrder = RegularQueue.Dequeue();
+    }
+    else
+    {
+        Console.WriteLine("No current orders\r\n");
+        return;
+    }
+    // Display ice creams in FirstOrder
+    Console.WriteLine(
+        "{0} Ice creams from order\r\n" +
+        "-----------------------------", firstOrder.IceCreamList.Count);
+    foreach (IceCream ic in firstOrder.IceCreamList)
+    {
+        ic.ToString();
+    }
+    Console.WriteLine("-----------------------------");
+
+    // Display total bill
+    Console.WriteLine("Total bill: ${0:0.00}\r\n", firstOrder.CalculateTotal());
+
+    //Initialize finalbill
+    double finalBill = firstOrder.CalculateTotal();
+
+    // Display customer membership status & points
+
+    Customer currentCustomer = new Customer();
+    // Find index of customer in customer list by matching id
+    int index = customersList.FindIndex(c => c.CurrentOrder != null && c.CurrentOrder.Id == firstOrder.Id);
+    currentCustomer = customersList[index];
+
+    Console.WriteLine(currentCustomer.Rewards.ToString());
+
+    IceCream expensiveIC = null;
+    // Check customer birthday for discount special
+    if (currentCustomer.Dob.ToShortDateString == DateTime.Now.ToShortDateString)
+    {
+        // assign expensiveIC as most expensive icecream
+        expensiveIC = firstOrder.IceCreamList.MaxBy(ic => ic.CalculatePrice());
+        finalBill -= expensiveIC.CalculatePrice();
+    }
+
+    // Punchcard for each icecream and check if order is eligible for punchcard discount special
+    IceCream firstIC = null;
+    bool punchRedeemed = false;
+    // checks punchcard is at the  10th punch
+    if (currentCustomer.Rewards.PunchCard == 10)
+    {
+        currentCustomer.Rewards.PunchCard = 0;
+        // check if first icecream in order is not affected by birthday discount and is the first punch discount of the order
+        if (firstOrder.IceCreamList[0] != expensiveIC && expensiveIC != null)
+        {
+            firstIC = firstOrder.IceCreamList[0];
+            punchRedeemed = true;
+            finalBill -= firstIC.CalculatePrice();
+        }
+        // checks if expensive icecream is first item in order
+        else if (firstOrder.IceCreamList[0] == expensiveIC && expensiveIC != null)
+        {
+            firstIC = firstOrder.IceCreamList[1];
+            punchRedeemed = true;
+            finalBill -= firstIC.CalculatePrice();
+        }
+    }
+
+    // check if customer is valid for reedeming points and prompt if user wants to redeem points
+    if (currentCustomer.Rewards.Tier != "Ordinary" && currentCustomer.Rewards.Points > 0)
+    {
+        Console.WriteLine("PointCard points: {0}",currentCustomer.Rewards.Points);
+        Console.Write("Enter no. of points to redeem: ");
+        int points = 0;
+
+        if (!int.TryParse(Console.ReadLine(), out points))
+        {
+            Console.WriteLine("Invalid points value, points will not be redeemed\r\n");
+        }
+
+        if (currentCustomer.Rewards.Points < points)
+        {
+            currentCustomer.Rewards.RedeemPoints(points);
+        }
+        else
+        {
+            currentCustomer.Rewards.RedeemPoints(points);
+            finalBill -= points * 0.02;
+        } 
+    }
+
+    // Display final bill
+    Console.WriteLine("Final bill: ${0:0.00}", finalBill);
+    Console.WriteLine("Press any key to confirm payment...");
+    Console.ReadKey();
+
+    // punch for each icecream until punch card reaches 10 points
+    for (int i = 0; i < firstOrder.IceCreamList.Count || currentCustomer.Rewards.PunchCard == 10; i++)
+    {
+        currentCustomer.Rewards.Punch();
+    }
+
+    // add points to customer
+    int addPoints = Convert.ToInt32(Math.Floor(finalBill * 0.72));
+    currentCustomer.Rewards.AddPoints(addPoints);
+
+    // confirm order time fulfilled with datetime now
+    firstOrder.TimeFulfilled = DateTime.Now;
+
+    currentCustomer.OrderHistory.Add(firstOrder);
+    currentCustomer.CurrentOrder = null;
+}
+// b Display monthly charged amounts breakdown & total charged amounts for the year
+void advancedDisplayChargedAmounts()
+{
+    Console.Write("Enter the year: ");
+    int year = 0;
+
+    // check if year is valid
+    if (!int.TryParse(Console.ReadLine(), out year))
+    {
+        Console.WriteLine("Invalid year value\r\n");
+        return;
+    }
+
+    DateOnly dateyear = new DateOnly();
+    // parse year into DateOnly and return if nonsesical
+    if (year > 2020)
+    {
+         dateyear = new DateOnly(year - 1, 1, 1);
+    }
+    else
+    {
+        Console.WriteLine("ha ha real funny - next time put a plausible date\r\n");
+        return;
+    }
+
+    double yearTotal = 0;
+    // loop 11 times (each month in a year starting from jan till dec)
+    Console.WriteLine();
+    for (int i = 1; i < 13; i++)
+    {
+        double monthTotal = 0;
+        foreach (Order order in ordersList)
+        {
+            // check if order is fulfilled within the month of that year
+            if (order.TimeFulfilled != null && order.TimeFulfilled.Value.Month == dateyear.Month && order.TimeFulfilled.Value.Year == dateyear.Year)
+            {
+                monthTotal += order.CalculateTotal();
+            } 
+        }
+        // display monthcost per month of the year
+        Console.WriteLine("{0} {1,5} ${2:0.00}", dateyear.ToString("MMM"),  dateyear.Year.ToString() + ":" ,  monthTotal);
+
+        // add monthTotal to yearTotal
+        yearTotal += monthTotal;
+
+        // increment month until loop is done
+        dateyear = dateyear.AddMonths(1);
+    }
+    // display yeartotal
+    Console.WriteLine("\r\nTotal:    ${1:0.00}", dateyear.Year, yearTotal);
+
+}
+
 // initializing test customer 
 
 Customer TestCustomer = new Customer("Test the Tester", 112233, DateTime.ParseExact("01/11/1966", "dd/MM/yyyy", null));
+TestCustomer.Rewards = new PointCard(0, 0);
 Order TestOrder = new Order(37, DateTime.ParseExact("27/10/2023 13:28", "dd/MM/yyyy HH:mm", null));
 
 //initializing ice creams for current order 
@@ -718,9 +1016,24 @@ TestOrder.IceCreamList.Add(TestCup);
 TestOrder.IceCreamList.Add(TestCone);
 TestOrder.IceCreamList.Add(TestWaffle);
 
-TestCustomer.OrderHistory.Add(TestOrder);
 TestCustomer.CurrentOrder = TestOrder;
+
 customersList.Add(TestCustomer);
+ordersList.Add(TestOrder);
+memberOrderDic.Add(TestOrder.Id, TestCustomer.MemberId);
+
+foreach (Order order in ordersList)
+{
+    Console.WriteLine(order.Id);
+}
+
+foreach (IceCream ic in TestCustomer.CurrentOrder.IceCreamList)
+{
+    Console.WriteLine(ic.ToString());
+}
+
+
+Console.WriteLine();
 
 // Start Program
 MenuStart();
