@@ -279,11 +279,11 @@ void InitializeQueue()
         }
         else if (option == "3")
         {
-        //Placeholder
+            RegisterNewCustomer();
         }
         else if (option == "4")
         {
-        //Placeholder
+        
         }
         else if (option == "5")
         {
@@ -329,8 +329,25 @@ void listAllOrders()
     Console.WriteLine();
 }
 //Feature 3 Register a new customer
+static void AppendCustomerToCSV(Customer customer)
+{
+    try
+    {        // Append the customer information to the customers.csv file
+        using (StreamWriter sw = File.AppendText("C:\\Users\\user\\Downloads\\ProgrammingAs\\ProgramminAssign\\ProgramminAssign\\datafiles\\customers.csv"))
+        {
+            sw.WriteLine($"{customer.Name},{customer.MemberId},{customer.Dob.ToString("dd/MM/yyyy")},{customer.Rewards.Tier},{customer.Rewards.Points},{customer.Rewards.PunchCard}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error appending customer to CSV: {ex.Message}");
+    }
+}
+
 void RegisterNewCustomer()
 {
+    /*
+     
     // Prompt user for customer information
     Console.Write("Enter customer name: ");
     string name = Console.ReadLine();
@@ -354,23 +371,12 @@ void RegisterNewCustomer()
     // Add the new customer to the list
     customersList.Add(newCustomer);
     Console.WriteLine("Customer registered successfully!");
+
+    */
 }
 
 //Feature 4 Create a customer’s order
-static void AppendCustomerToCSV(Customer customer)
-{
-    try
-    {        // Append the customer information to the customers.csv file
-        using (StreamWriter sw = File.AppendText("C:\\Users\\user\\Downloads\\ProgrammingAs\\ProgramminAssign\\ProgramminAssign\\datafiles\\customers.csv"))
-        {
-            sw.WriteLine($"{customer.Name},{customer.MemberId},{customer.Dob.ToString("dd/MM/yyyy")},{customer.Rewards.Tier},{customer.Rewards.Points},{customer.Rewards.PunchCard}");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error appending customer to CSV: {ex.Message}");
-    }
-}
+
 //Feature 5 Display order details of a customer
 void displayCustomerOrder()
 {
@@ -494,7 +500,7 @@ void modifyCustomerOrder()
         if (option == "1")
         {
             // check if order has at least 1 ice cream else reject
-            if (customersList[index].CurrentOrder.IceCreamList.Count > 1)
+            if (customersList[index].CurrentOrder.IceCreamList.Count >= 1)
             {
                 Console.Write("Choose an ice cream to modify by index: ");
                 int indexic = 0;
@@ -574,7 +580,7 @@ void modifyCustomerOrder()
             List<Flavour> flavList = new List<Flavour>();
             for (int i = 0 ;i < scoops ;i++)
             {
-                Console.Write("Enter Flavour {0}: ",i+1);
+                Console.Write("Enter Flavour {0} (Case Sensitive): ",i+1);
                 string flav = Console.ReadLine();
                 if (flav == "Vanilla" || flav == "Chocolate" || flav == "Strawberry" || flav == "Durian" || flav == "Ube" || flav == "Sea Salt")
                 {
@@ -612,12 +618,12 @@ void modifyCustomerOrder()
             List<Topping> topList = new List<Topping>();
             // Choose from 0-4 Toppings
             Console.WriteLine("\r\n" +
-                                        "--- Toppings ---\r\n" +
-                                        "<O Sprinkles\r\n" +
-                                        "<O Mochi\r\n" +
-                                        "<O Sago\r\n" +
-                                        "<O Oreos\r\n" +
-                                        "----------------");
+                "--- Toppings ---\r\n" +
+                "<O Sprinkles\r\n" +
+                "<O Mochi\r\n" +
+                "<O Sago\r\n" +
+                "<O Oreos\r\n" +
+                "----------------");
             Console.WriteLine();
             int toppings = 0;
             Console.WriteLine("Minimum 0 toppings Maximum 4 toppings");
@@ -722,21 +728,27 @@ void modifyCustomerOrder()
             if (customersList[index].CurrentOrder.IceCreamList.Count > 1)
             {
                 Console.Write("Choose an ice cream to remove by index: ");
-                int indexic = Convert.ToInt32(Console.ReadLine()) - 1;
-
-                Console.Write("ARE YOU SURE? Enter DELETE to confirm or enter anything else to invalidate operation: ");
-                string read = Console.ReadLine();
-
-                if (read == "DELETE")
+                int indexic = 0;
+                // check if consolereadline is integer & within index range
+                if (!int.TryParse(Console.ReadLine(), out indexic) || indexic <= 0 || indexic >= customersList[index].CurrentOrder.IceCreamList.Count)
                 {
-                    customersList[index].CurrentOrder.DeleteIceCream(indexic);
-                    Console.WriteLine("Ice Cream removed, returning to menu\r\n");
-                    return;
+                    Console.WriteLine("Invalid index value, returning to menu\r\n");
                 }
                 else
                 {
-                    Console.WriteLine("Operation invalid, returning to modify menu\r\n");
-                }
+                    Console.Write("ARE YOU SURE? Enter DELETE to confirm or enter anything else to invalidate operation: ");
+                    string read = Console.ReadLine();
+
+                    if (read == "DELETE")
+                    {
+                        customersList[index].CurrentOrder.DeleteIceCream(indexic-1);
+                        Console.WriteLine("Ice Cream removed, returning to menu\r\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Operation invalid, returning to modify menu\r\n");
+                    }
+                }           
             }
             else
             {
@@ -805,6 +817,7 @@ void AMenuStart()
 // a Process an order and checkout
 void advancedProcessOC()
 {
+    Console.WriteLine();
     Order firstOrder = null;
     // check & dequeue for goldqueue before regular queue - return if no orders in either queues
     if (GoldQueue.Count > 0)
@@ -826,7 +839,8 @@ void advancedProcessOC()
         "-----------------------------", firstOrder.IceCreamList.Count);
     foreach (IceCream ic in firstOrder.IceCreamList)
     {
-        ic.ToString();
+        Console.WriteLine(ic.ToString());
+       
     }
     Console.WriteLine("-----------------------------");
 
@@ -843,6 +857,8 @@ void advancedProcessOC()
     int index = customersList.FindIndex(c => c.CurrentOrder != null && c.CurrentOrder.Id == firstOrder.Id);
     currentCustomer = customersList[index];
 
+    // Display customer punchard details
+    Console.WriteLine("Customer {0}'s PunchCard details",currentCustomer.Name);
     Console.WriteLine(currentCustomer.Rewards.ToString());
 
     IceCream expensiveIC = null;
@@ -856,7 +872,6 @@ void advancedProcessOC()
 
     // Punchcard for each icecream and check if order is eligible for punchcard discount special
     IceCream firstIC = null;
-    bool punchRedeemed = false;
     // checks punchcard is at the  10th punch
     if (currentCustomer.Rewards.PunchCard == 10)
     {
@@ -865,15 +880,16 @@ void advancedProcessOC()
         if (firstOrder.IceCreamList[0] != expensiveIC && expensiveIC != null)
         {
             firstIC = firstOrder.IceCreamList[0];
-            punchRedeemed = true;
             finalBill -= firstIC.CalculatePrice();
+            Console.WriteLine("PunchCard redeemed! 11th ice cream is free of charge!");
         }
         // checks if expensive icecream is first item in order
         else if (firstOrder.IceCreamList[0] == expensiveIC && expensiveIC != null)
         {
             firstIC = firstOrder.IceCreamList[1];
-            punchRedeemed = true;
             finalBill -= firstIC.CalculatePrice();
+            Console.WriteLine("PunchCard redeemed! 11th ice cream is free of charge!");
+
         }
     }
 

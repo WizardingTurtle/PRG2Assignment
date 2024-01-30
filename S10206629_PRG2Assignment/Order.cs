@@ -30,10 +30,9 @@ using S10206629_PRG2Assignment;
             return;
         }
 
-        IceCreamList[iceCreamIndex].ToString();
-
         while (true)
         {
+            IceCreamList[iceCreamIndex].ToString();
             // display info and get user to do something
             Console.WriteLine("\r\n"+
             "-----------------------------\r\n"+
@@ -56,7 +55,7 @@ using S10206629_PRG2Assignment;
                         IceCreamList[iceCreamIndex].ToString());
 
                     Console.Write(
-                        "Select which property of the ice c ream you want to modify\r\n" +
+                        "\r\nSelect which property of the ice cream you want to modify\r\n" +
                         "Type 0 to return to menu\r\n" +
                         "------------------------------------\r\n" +
                         "Enter property or return to menu: ");
@@ -160,19 +159,18 @@ using S10206629_PRG2Assignment;
                                         Console.WriteLine("----------------");
 
                                         Console.WriteLine("{0} flavours left to add", addCount - i);
-                                        Console.Write("Enter Flavour to add: ");
+                                        Console.Write("Enter Flavour to add (Case Sensitive): ");
 
-                                        // console readline is lowered char to make flavour adding a little easier
                                         // if code below will add to existing flav quantity or add new flavour to list
-                                        string flav = Console.ReadLine().ToLower();
-                                        if (flav == "vanilla" || flav == "chocolate" || flav == "strawberry" || flav == "durian" || flav == "ube" || flav == "sea salt")
+                                        string flav = Console.ReadLine();
+                                        if (flav == "Vanilla" || flav == "Chocolate" || flav == "Strawberry" || flav == "Durian" || flav == "Ube" || flav == "Sea Salt")
                                         {
-                                            bool TypeExist = IceCreamList[iceCreamIndex].Flavours.Any(item => item.Type.ToLower() == flav);
+                                            bool TypeExist = IceCreamList[iceCreamIndex].Flavours.Any(item => item.Type == flav);
                                             // increment quantity of flavour if true
                                             if (TypeExist)
                                             {
                                                 //find flavour in list by index + checking if type is the flavour
-                                                int ind = IceCreamList[iceCreamIndex].Flavours.FindIndex(item => item.Type.ToLower() == flav);
+                                                int ind = IceCreamList[iceCreamIndex].Flavours.FindIndex(item => item.Type == flav);
                                                 IceCreamList[iceCreamIndex].Flavours[ind].Quantity += 1;
                                             }
                                             // Create flavour and add to list
@@ -473,19 +471,26 @@ using S10206629_PRG2Assignment;
             // delete ice cream and return to menu
             else if (option == "2")
             {
-                // important prompt incase user big finger's option not on purpose
-                Console.Write("ARE YOU SURE? Enter DELETE to confirm or enter anything else to invalidate operation: ");
-                string read = Console.ReadLine ();
-
-                if (read == "DELETE")
+                // check if there is at least 2 or more icecreams else return to menu 
+                if (IceCreamList.Count > 1)
                 {
-                    DeleteIceCream(iceCreamIndex);
-                    Console.WriteLine("Ice Cream removed, returning to menu\r\n");
-                    return;
+                    // important prompt incase user big finger's option not on purpose
+                    Console.Write("ARE YOU SURE? Enter DELETE to confirm or enter anything else to invalidate operation: ");
+                    string read = Console.ReadLine();
+
+                    if (read == "DELETE")
+                    {
+                        DeleteIceCream(iceCreamIndex);
+                        Console.WriteLine("Ice Cream removed, returning to modify menu\r\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Operation invalid, returning to modify menu\r\n");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Operation invalid, returning to modify menu\r\n");
+                    Console.WriteLine("Operation invalid, Order MUST have at least 1 Ice cream");
                 }
             }
             // changes are saved and user goes back to main code in shame
