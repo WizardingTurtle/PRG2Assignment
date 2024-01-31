@@ -279,7 +279,7 @@ void InitializeQueue()
         }
         else if (option == "3")
         {
-            RegisterNewCustomer();
+
         }
         else if (option == "4")
         {
@@ -730,7 +730,7 @@ void modifyCustomerOrder()
                 Console.Write("Choose an ice cream to remove by index: ");
                 int indexic = 0;
                 // check if consolereadline is integer & within index range
-                if (!int.TryParse(Console.ReadLine(), out indexic) || indexic <= 0 || indexic >= customersList[index].CurrentOrder.IceCreamList.Count)
+                if (!int.TryParse(Console.ReadLine(), out indexic) || indexic <= 0 || indexic > customersList[index].CurrentOrder.IceCreamList.Count)
                 {
                     Console.WriteLine("Invalid index value, returning to menu\r\n");
                 }
@@ -954,7 +954,7 @@ void advancedDisplayChargedAmounts()
     // parse year into DateOnly and return if nonsesical
     if (year > 2020)
     {
-         dateyear = new DateOnly(year - 1, 1, 1);
+         dateyear = new DateOnly(year, 1, 1);
     }
     else
     {
@@ -993,7 +993,7 @@ void advancedDisplayChargedAmounts()
 // initializing test customer 
 
 Customer TestCustomer = new Customer("Test the Tester", 112233, DateTime.ParseExact("01/11/1966", "dd/MM/yyyy", null));
-TestCustomer.Rewards = new PointCard(0, 0);
+TestCustomer.Rewards = new PointCard(112, 10);
 Order TestOrder = new Order(37, DateTime.ParseExact("27/10/2023 13:28", "dd/MM/yyyy HH:mm", null));
 
 //initializing ice creams for current order 
@@ -1006,8 +1006,9 @@ IceCream TestCup = new Cup
     new List<Topping> { new Topping("Oreos") }
     );
 
-Console.WriteLine(TestCup.ToString());
-Console.WriteLine(TestCup.Flavours[0].ToString());
+
+// Console.WriteLine(TestCup.ToString());
+// Console.WriteLine(TestCup.Flavours[0].ToString());
 
 IceCream TestCone = new Cone
     ("Cone", 
@@ -1015,8 +1016,9 @@ IceCream TestCone = new Cone
     new List<Flavour> { new Flavour("Vanilla", false, 2) },
     new List<Topping> { new Topping("Oreos") }, 
     false);
-Console.WriteLine(TestCone.ToString());
-Console.WriteLine(TestCone.Flavours[0].ToString());
+
+// Console.WriteLine(TestCone.ToString());
+// Console.WriteLine(TestCone.Flavours[0].ToString());
 
 IceCream TestWaffle = new Waffle
     ("Waffle",
@@ -1025,8 +1027,9 @@ IceCream TestWaffle = new Waffle
     new List<Topping> { new Topping("Oreos") },
     "Original"
     );
-Console.WriteLine(TestWaffle.ToString());
-Console.WriteLine(TestWaffle.Flavours[0].ToString());
+
+// Console.WriteLine(TestWaffle.ToString());
+// Console.WriteLine(TestWaffle.Flavours[0].ToString());
 
 TestOrder.IceCreamList.Add(TestCup);
 TestOrder.IceCreamList.Add(TestCone);
@@ -1038,6 +1041,7 @@ customersList.Add(TestCustomer);
 ordersList.Add(TestOrder);
 memberOrderDic.Add(TestOrder.Id, TestCustomer.MemberId);
 
+/*
 foreach (Order order in ordersList)
 {
     Console.WriteLine(order.Id);
@@ -1047,9 +1051,7 @@ foreach (IceCream ic in TestCustomer.CurrentOrder.IceCreamList)
 {
     Console.WriteLine(ic.ToString());
 }
-
-
-Console.WriteLine();
+*/
 
 // Start Program
 MenuStart();
