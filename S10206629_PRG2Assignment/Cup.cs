@@ -1,4 +1,10 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace S10206629_PRG2Assignment
 {
-     class Cup : IceCream
+    class Cup : IceCream
     {
         public Cup() { }
         public Cup(string option, int scoops, List<Flavour> flavour, List<Topping> topping) : base(option, scoops, flavour, topping) { }
@@ -19,7 +25,7 @@ namespace S10206629_PRG2Assignment
             {
                 price = 4.00;
             }
-            else if (this.Scoops == 2) 
+            else if (this.Scoops == 2)
             {
                 price = 5.50;
             }

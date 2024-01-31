@@ -1,5 +1,15 @@
-﻿
- class Customer
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+// See https://aka.ms/new-console-template for more information
+using System;
+using System.Collections.Generic;
+
+
+class Customer
 {
     // Initiliaze
     public string Name { get; set; }
@@ -10,7 +20,7 @@
     public PointCard Rewards { get; set; }
 
     // Constructors
-    public Customer(){}
+    public Customer() { }
 
     public Customer(string name, int memberId, DateTime dob)
     {

@@ -1,4 +1,10 @@
-﻿using System;
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +14,7 @@ namespace S10206629_PRG2Assignment
 {
     internal class Flavour
     {
-        public string Type  { get; set; }
+        public string Type { get; set; }
         public bool Premium { get; set; }
         public int Quantity { get; set; }
         public Flavour() { }
@@ -20,7 +26,7 @@ namespace S10206629_PRG2Assignment
         }
         public override string ToString()
         {
-            return "Type: "+ Type +" Premium: "+ Premium +" Quantity: " + Quantity;
+            return "Type: " + Type + " Premium: " + Premium + " Quantity: " + Quantity;
         }
     }
 }

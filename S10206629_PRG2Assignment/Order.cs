@@ -1,6 +1,12 @@
-﻿
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+// See https://aka.ms/new-console-template for more information
 using S10206629_PRG2Assignment;
- class Order
+class Order
 {
     public int Id { get; set; }
     public DateTime TimeReceived { get; set; }
@@ -8,7 +14,7 @@ using S10206629_PRG2Assignment;
     public List<IceCream> IceCreamList { get; set; }
 
     // Constructors
-    public Order(){}
+    public Order() { }
 
     public Order(int id, DateTime timeReceived)
     {
@@ -34,8 +40,8 @@ using S10206629_PRG2Assignment;
         {
             IceCreamList[iceCreamIndex].ToString();
             // display info and get user to do something
-            Console.WriteLine("\r\n"+
-            "-----------------------------\r\n"+
+            Console.WriteLine("\r\n" +
+            "-----------------------------\r\n" +
             "1. Modify Ice Cream Details\r\n" +
             "2. Delete Ice Cream\r\n" +
             "0. Return to Menu\r\n" +
@@ -51,7 +57,7 @@ using S10206629_PRG2Assignment;
                     Console.WriteLine();
                     Console.WriteLine(
                         "Ice Cream Properties\r\n" +
-                        "------------------------------------\r\n"+
+                        "------------------------------------\r\n" +
                         IceCreamList[iceCreamIndex].ToString());
 
                     Console.Write(
@@ -61,7 +67,7 @@ using S10206629_PRG2Assignment;
                         "Enter property or return to menu: ");
 
                     string property = Console.ReadLine().ToLower();
-                    
+
                     if (property == "option")
                     {
                         Console.WriteLine(
@@ -124,7 +130,7 @@ using S10206629_PRG2Assignment;
                             }
                             else
                             {
-                                
+
 
                                 Console.WriteLine();
                                 // add new flavours or increase quantity of existing flavours if more scoops
@@ -187,7 +193,7 @@ using S10206629_PRG2Assignment;
                                                     premium = false;
                                                 }
                                                 IceCreamList[iceCreamIndex].Flavours.Add(new Flavour(flav, premium, 1));
-                                            } 
+                                            }
                                         }
                                         else
                                         {
@@ -209,7 +215,7 @@ using S10206629_PRG2Assignment;
                                         }
                                         Console.WriteLine("----------------");
 
-                                        Console.WriteLine("{0} flavours left to remove", subCount-i);
+                                        Console.WriteLine("{0} flavours left to remove", subCount - i);
                                         Console.Write("Choose which flavour to remove or decrease by 1 in quantity: ");
                                         string read = Console.ReadLine().ToLower();
 
@@ -229,7 +235,7 @@ using S10206629_PRG2Assignment;
                                             --i;
                                             Console.WriteLine("invalid flavour");
                                         }
-                                    }                                     
+                                    }
                                 }
                                 // remember to change ice cream scoops
                                 // this is added at the end cause I cannot be bothered to make a temp value to hold original count
@@ -283,7 +289,7 @@ using S10206629_PRG2Assignment;
                                 //find index of flavour in flavourlist of the icecream
                                 int index = IceCreamList[iceCreamIndex].Flavours.FindIndex(item => item.Type == flavOld);
                                 //check if flavour is premium
-                                bool premium = false;                                
+                                bool premium = false;
                                 if (flavNew == "Durian" || flavNew == "Ube" || flavNew == "Sea Salt")
                                 {
                                     premium = true;
@@ -292,7 +298,7 @@ using S10206629_PRG2Assignment;
                                 {
                                     premium = false;
                                 }
-                                IceCreamList[iceCreamIndex].Flavours[index] = new Flavour(flavNew,premium, IceCreamList[iceCreamIndex].Flavours[index].Quantity);
+                                IceCreamList[iceCreamIndex].Flavours[index] = new Flavour(flavNew, premium, IceCreamList[iceCreamIndex].Flavours[index].Quantity);
                             }
                             else { Console.WriteLine("Invalid flavour"); }
                         }
@@ -324,7 +330,7 @@ using S10206629_PRG2Assignment;
                             // Add topping code
                             if (read == "1")
                             {
-                                if (IceCreamList[iceCreamIndex].Toppings.Count <4)
+                                if (IceCreamList[iceCreamIndex].Toppings.Count < 4)
                                 {
                                     Console.WriteLine("\r\n" +
                                         "--- Toppings ---\r\n" +
@@ -343,9 +349,9 @@ using S10206629_PRG2Assignment;
                                         IceCreamList[iceCreamIndex].Toppings.Add(new Topping(topping));
                                         Console.WriteLine("{0} topping successfully added", topping);
                                     }
-                                    else { Console.WriteLine("Invalid Topping");}
+                                    else { Console.WriteLine("Invalid Topping"); }
                                 }
-                                else { Console.WriteLine("Ice cream already has 4 toppings, remove or change a topping");}
+                                else { Console.WriteLine("Ice cream already has 4 toppings, remove or change a topping"); }
                             }
                             // remove topping code
                             else if (read == "2")
@@ -364,7 +370,7 @@ using S10206629_PRG2Assignment;
                                         Console.WriteLine("{0} topping successfully removed", topping);
                                     }
                                 }
-                                else { Console.WriteLine("Are you blind? THERE ARE NO TOPPINGS!");}
+                                else { Console.WriteLine("Are you blind? THERE ARE NO TOPPINGS!"); }
                             }
                             // change topping code
                             else if (read == "3")
@@ -416,7 +422,7 @@ using S10206629_PRG2Assignment;
                     // last 2 else ifs check if the object is of a specific class before changing the respective attributess
                     else if (property == "dipped")
                     {
-                        
+
                         if (IceCreamList[iceCreamIndex] is Cone coneD && coneD.Dipped == true)
                         {
                             coneD.Dipped = false;
@@ -427,7 +433,7 @@ using S10206629_PRG2Assignment;
                             coneU.Dipped = true;
                             Console.WriteLine("Ice cream cone has been set to dipped");
                         }
-                        else {Console.WriteLine("Ice Cream is not a cone");}
+                        else { Console.WriteLine("Ice Cream is not a cone"); }
                     }
                     else if (property == "waffleflavour" || property == "waffle flavour")
                     {
@@ -456,18 +462,18 @@ using S10206629_PRG2Assignment;
                                     Console.WriteLine("Waffle flavour successfully changed to {0}", read);
                                 }
                             }
-                            else {Console.WriteLine("Invalid Waffle Flavour");}
+                            else { Console.WriteLine("Invalid Waffle Flavour"); }
                         }
-                        else {Console.WriteLine("Ice Cream is not a waffle");}
+                        else { Console.WriteLine("Ice Cream is not a waffle"); }
                     }
                     else if (property == "0")
                     {
                         Console.WriteLine("Returning to Modify Menu");
                         break;
                     }
-                    else {Console.WriteLine("Invalid property name");}
+                    else { Console.WriteLine("Invalid property name"); }
                 }
-            } 
+            }
             // delete ice cream and return to menu
             else if (option == "2")
             {
@@ -527,4 +533,3 @@ using S10206629_PRG2Assignment;
         return $"Order ID: {Id}, Time Received: {TimeReceived}, Time Fulfilled: {TimeFulfilled}, Total Cost: ${CalculateTotal():0.00}";
     }
 }
-

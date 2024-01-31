@@ -1,8 +1,14 @@
-﻿namespace S10206629_PRG2Assignment
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+namespace S10206629_PRG2Assignment
 {
-     class Cone : IceCream
+    class Cone : IceCream
     {
-        public bool Dipped {  get; set; }  
+        public bool Dipped { get; set; }
         public Cone() { }
         public Cone(string option, int scoops, List<Flavour> flavour, List<Topping> topping, bool dipped) : base(option, scoops, flavour, topping)
         {
@@ -17,7 +23,7 @@
             {
                 price = 4.00;
             }
-            else if (this.Scoops == 2) 
+            else if (this.Scoops == 2)
             {
                 price = 5.50;
             }
@@ -55,7 +61,7 @@
             string tops = "";
             foreach (Topping top in Toppings)
             {
-               
+
                 tops += top.Type + " ";
             }
 

@@ -1,9 +1,15 @@
-﻿
+﻿//==========================================================
+// Student Number : S10259948
+// Student Name : Goh Jun Kai
+// Partner Name : Rafol Emmanuel Legaspi
+//==========================================================
+
+
 namespace S10206629_PRG2Assignment
 {
-     abstract class IceCream
+    abstract class IceCream
     {
-        public string Option {  get; set; }
+        public string Option { get; set; }
         public int Scoops { get; set; }
         public List<Flavour> Flavours { get; set; }
         public List<Topping> Toppings { get; set; }
@@ -30,7 +36,7 @@ namespace S10206629_PRG2Assignment
                 tops += top.Type + " ";
             }
 
-            return "Option: "+ Option +" Scoops: "+ Scoops+" Flavours: " + flavs +" Toppings: "+ tops;
+            return "Option: " + Option + " Scoops: " + Scoops + " Flavours: " + flavs + " Toppings: " + tops;
         }
     }
 }
